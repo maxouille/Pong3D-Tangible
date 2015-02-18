@@ -1,0 +1,66 @@
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Obj/
+UnityGenerated/
+Library/
+Assets/markers/
+ 
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.booproj
+ 
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+*.png
+*.aux
+*.log
+*.out
+*.pdf
+*.gz
+*.toc
+*.assets
+test_Data/level1
+test_Data/Resources/unity default resources
+*.exe
+*.dll
+*.aspx
+*.config
+test_Data/Mono/etc/mono/config
+*.ini
+*.browser
+*.map
+*.xml
+*.txt
+test_Data/level7
+test_Data/level6
+test_Data/level4
+test_Data/level3
+test_Data/level5
+test_Data/mainData
+test_Data/level2
+test_Data/level0
+test_Data/Resources/unity_builtin_extra
+test_Data/PlayerConnectionConfigFile
+Assets/Scene/Basic-Cube.unity
+Assets/Scene/Basic-Cube.unity.meta
