@@ -201,8 +201,8 @@ public class xzimgMarkerUnityPluginPlane : MonoBehaviour {
 				RaquetteObject2 = GameObject.Find("RaquetteObject2");
 
 				// Find the gameobjects for pivot and 3D model
-				FieldPivot = GameObject.Find("FieldPivot");
-				FieldObject = GameObject.Find("FieldObject");
+				FieldPivot = GameObject.Find("PlanePivot");
+				FieldObject = GameObject.Find("Forme");
 				
 				GameObject go = new GameObject("MarkerInfo");
 			}

@@ -19,24 +19,27 @@ var ballSpeed : float = 0.1;
 var goBall : boolean = true;
 
 var D : Vector3;
+var Forme : GameObject;
 
 function Start () {
+	
+	Forme = gameObject.Find("PlanePivot").transform.Find("Forme").gameObject;
 
 	ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-	ball.transform.parent = gameObject.Find("PlanePivot").transform.Find("Forme").transform;
+	ball.transform.parent = Forme.transform;
 	ball.name = "Ball";
-	ball.transform.localPosition = Vector3(0, 0, 0); 
+	ball.transform.localScale = new Vector3(0.1,0.1,0.1);
+	ball.transform.localPosition = Vector3(0, 0, 0);
 	
 	ball.renderer.enabled = false;
 			
-			var field : GameObject = gameObject.Find("PlanePivot").transform.Find("Forme").gameObject;
-			var t : Transform = field.transform;
-			var size : Vector3 = t.renderer.bounds.size;
+			var t : Transform = Forme.transform;
+			var size : Vector2 = gameObject.Find("Main Camera").GetComponent(meshPlane).size;
  			
 			fieldWidth = size.x;
-			fieldHeight = size.z;
+			fieldHeight = size.y;
 
-			Debug.Log("width : "+fieldWidth+" height : "+fieldHeight);
+			//Debug.Log("width : "+fieldWidth+" height : "+fieldHeight);
 				
 	/*paddle1 = gameObject.Find("Paddle1Pivot").transform.Find("Paddle1Object").gameObject;
 	paddle2 = gameObject.Find("Paddle2Pivot").transform.Find("Paddle2Object").gameObject;
@@ -50,7 +53,7 @@ function Update () {
 		goBall = true;
 		}*/
 
-	if (gameObject.Find("PlanePivot").transform.Find("Forme").renderer.isVisible) {
+	if (Forme.renderer.isVisible) {
 	 	ball.renderer.enabled = true;
 	 	//if (goBall) {
 	 ballPhysics();
@@ -62,24 +65,11 @@ function Update () {
 
 function ballPhysics() {
 
-//Origin of the plane frame : 
-	D = gameObject.Find("PlanePivot").transform.Find("Forme").renderer.bounds.center;
-		
-		//Get the position of the ball in the world frame
-		var ballposX = ball.transform.position.x;
-		var ballposY = ball.transform.position.y;
-		var ballposZ = ball.transform.position.z;
-		
-		//Compute the position of the ball in the plane frame
-		var ballposXplane = -D.x + ballposX;
-		var ballposYplane = -D.y + ballposY;
-		var ballposZplane = -D.z + ballposZ;
-		
 		// update ball position in the plane frame
-        ballposXplane += ballDirX * ballSpeed;
-        ballposZplane += ballDirZ * ballSpeed;
+        ball.transform.localPosition.x += ballDirX * ballSpeed;
+        ball.transform.localPosition.z += ballDirZ * ballSpeed;
         // if ball goes off the 'left' side (Player's side)
-        if (ballposXplane <= -fieldWidth/2) {
+        if (ball.transform.localPosition.x <= -fieldWidth/2) {
                 // Player1 scores ++
                 // update scoreboard in GUI
                 // reset ball to center
@@ -88,7 +78,7 @@ function ballPhysics() {
                 //matchScoreCheck();
         }
         // if ball goes off the 'right' side (CPU's side)
-        if (ballposXplane >= fieldWidth/2) {      
+        if (ball.transform.localPosition.x >= fieldWidth/2) {      
                 // Player2 scores ++
                 // update scoreboard GUI
                 // reset ball to center
@@ -97,15 +87,16 @@ function ballPhysics() {
                 //matchScoreCheck();
         }
         // if ball goes off the bottom side (side of table)
-        if (ballposZplane <= -fieldHeight/2) {
+        if (ball.transform.localPosition.z <= -fieldHeight/2) {
                 ballDirZ = -ballDirZ;
         }       
         // if ball goes off the top side (side of table)
-        if (ballposZplane >= fieldHeight/2) {
+        if (ball.transform.localPosition.z >= fieldHeight/2) {
                 ballDirZ = -ballDirZ;
         }
         
-        Debug.Log("X : "+ballposX);
+        //Debug.Log("Local : X : "+ball.transform.localPosition.x+" Y : "+ball.transform.localPosition.y+" Z : "+ball.transform.localPosition.z);
+        //Debug.Log("Global : X : "+ball.transform.position.x+" Y : "+ball.transform.position.y+" Z : "+ball.transform.position.z);
         
         // limit ball's y-speed to 2x the x-speed
         // this is so the ball doesn't speed from left to right super fast
@@ -115,28 +106,14 @@ function ballPhysics() {
         }
         else if (ballDirX < -ballSpeed * 2) {
                 ballDirX = -ballSpeed * 2;
-        }
-        
-        
-        ball.transform.position.x = ballposXplane + D.x;
-        ball.transform.position.y = ballposYplane + D.y;
-        ball.transform.position.z = ballposZplane + D.z;
-     
-}
-
-function transformToWorld() {
-	
-	
-	
-	
+        }    
 }
 
 function resetBall(loser) {
-Debug.Log("reset");
         // position the ball in the center of the table
-        ball.transform.position.x = D.x;
-        ball.transform.position.y = D.y;
-        ball.transform.position.z = D.z;
+        ball.transform.localPosition.x = 0;
+        ball.transform.localPosition.y = 0;
+        ball.transform.localPosition.z = 0;
 
         // if player lost the last point, we send the ball to opponent
         if (loser == 1) {

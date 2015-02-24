@@ -2,7 +2,7 @@
 
 var Plan : GameObject;
 var center : boolean = true;
-var size : Vector2 = new Vector2 (10, 10);
+var size : Vector2 = new Vector2 (5, 2);
 var resolutionX : int = 10;
 var resolutionZ : int = 10;
 private var newVertices : Vector3[] = new Vector3[(resolutionX + 1) * (resolutionZ + 1)];
@@ -35,7 +35,7 @@ function Start () {
 	CreateMesh ();
 	OtherFace();
 	
-	Plan.transform.rotation = Quaternion.Euler(-45,10,30);
+	Plan.renderer.enabled = false;
 }
  
 // reconstruct mesh based on size and resolution
