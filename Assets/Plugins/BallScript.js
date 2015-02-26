@@ -5,6 +5,8 @@ var paddle1 : GameObject;
 var paddle2 : GameObject;
 var paddleHeight : float;
 var paddleWidth : float;
+var paddle1DirZ = 0;
+
 
 //field variables
 var fieldHeight : float;
@@ -41,11 +43,11 @@ function Start () {
 
 			//Debug.Log("width : "+fieldWidth+" height : "+fieldHeight);
 				
-	/*paddle1 = gameObject.Find("Paddle1Pivot").transform.Find("Paddle1Object").gameObject;
-	paddle2 = gameObject.Find("Paddle2Pivot").transform.Find("Paddle2Object").gameObject;
+	paddle1 = gameObject.Find("PlanePivot").transform.Find("Forme").transform.Find("FormePaddle1").gameObject;
+	paddle2 = gameObject.Find("PlanePivot").transform.Find("Forme").transform.Find("FormePaddle2").gameObject;
 	
-	paddleHeight = paddle1.renderer.bounds.size.z;
-	paddleWidth = paddle1.renderer.bounds.size.x;*/
+	paddleHeight = gameObject.Find("Main Camera").GetComponent(meshParallelepipoid).height * paddle1.transform.localScale.y;
+	paddleWidth = gameObject.Find("Main Camera").GetComponent(meshParallelepipoid).width * paddle1.transform.localScale.x;
 }
 
 function Update () {
@@ -57,6 +59,7 @@ function Update () {
 	 	ball.renderer.enabled = true;
 	 	//if (goBall) {
 	 ballPhysics();
+	 paddlePhysics();
 	// }
 	 }
 	
@@ -127,26 +130,30 @@ function resetBall(loser) {
         // set the ball to move towards the top of the plane
         ballDirZ = 0.1;
 }
-/*
+
 function paddlePhysics() {
+
+	var ballPosition = ball.transform.localPosition;
+	var paddle1Position = paddle1.transform.localPosition;
+	var paddle2Position = paddle2.transform.localPosition;
 	// if ball is aligned with paddle1 on x plane
 	// remember the position is the CENTER of the object
 	// we only check between the front and the middle of the paddle (one-way collision)
-	if (ball.position.y <= raquette1.position.y + paddleHeight
-	&& ball.position.y >= raquette1.position.y) {
+	if (ballPosition.x <= paddle1Position.x + paddleHeight
+	&& ballPosition.y >= paddle1Position.x) {
 		// and if ball is aligned with paddle1 on y plane
-		if (ball.position.x <= raquette1.position.x + paddleWidth/2
-		&& ball.position.x >= raquette1.position.x - paddleWidth/2) {
+		if (ballPosition.z <= paddle1Position.z + paddleWidth/2
+		&& ballPosition.z >= paddle1Position.z - paddleWidth/2) {
 			// and if ball is travelling towards player (-ve direction)
-			if (ballDirY < 0) {
+			if (ballDirX < 0) {
 				// stretch the paddle to indicate a hit
-				raquette1.scale.x *=1.5;
+				//raquette1.scale.x *=1.5;
 				// switch direction of ball travel to create bounce
-				ballDirY = -ballDirY;
+				ballDirX = -ballDirX;
 				// we impact ball angle when hitting it
 				// this is not realistic physics, just spices up the gameplay
 				// allows you to 'slice' the ball to beat the opponent
-				ballDirX -= raquette1DirY * 0.7;
+				ballDirZ = -ballDirZ;
 			}
 		}
 	}
@@ -154,22 +161,22 @@ function paddlePhysics() {
 	// if ball is aligned with paddle2 on x plane
 	// remember the position is the CENTER of the object
 	// we only check between the front and the middle of the paddle (one-way collision)
-	if (ball.position.y >= raquette2.position.y - paddleHeight
-	&& ball.position.y <= raquette2.position.y) {
+	if (ballPosition.x >= paddle2Position.x - paddleHeight
+	&& ballPosition.x <= paddle2Position.x) {
 		// and if ball is aligned with paddle2 on y plane
-		if (ball.position.x <= raquette2.position.x + paddleWidth/2
-		&& ball.position.x >= raquette2.position.x - paddleWidth/2) {
+		if (ballPosition.z <= paddle2Position.z + paddleWidth/2
+		&& ballPosition.z >= paddle2Position.z - paddleWidth/2) {
 			// and if ball is travelling towards opponent (+ve direction)
-			if (ballDirY > 0) {
+			if (ballDirX > 0) {
 				// stretch the paddle to indicate a hit
-				raquette2.scale.x *= 1.5;	
+				//raquette2.scale.x *= 1.5;	
 				// switch direction of ball travel to create bounce
-				ballDirY = -ballDirY;
+				ballDirX = -ballDirX;
 				// we impact ball angle when hitting it
 				// this is not realistic physics, just spices up the gameplay
 				// allows you to 'slice' the ball to beat the opponent
-				ballDirX -= raquette2DirY * 0.7;
+				ballDirZ = -ballDirZ;
 			}
 		}
-	}*/
-//}
+	}
+}

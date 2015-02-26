@@ -2,7 +2,7 @@
 
 var Plan : GameObject;
 var center : boolean = true;
-var size : Vector2 = new Vector2 (5, 2);
+var size : Vector2 = new Vector2 (4, 2);
 var resolutionX : int = 10;
 var resolutionZ : int = 10;
 private var newVertices : Vector3[] = new Vector3[(resolutionX + 1) * (resolutionZ + 1)];
@@ -24,6 +24,9 @@ function Start () {
     Plan.renderer.material = mat;
     Plan.AddComponent(MeshCollider);
 	Plan.transform.parent = gameObject.Find("PlanePivot").transform;
+	
+	Plan.transform.localScale = new Vector3 (0.5,0.5,0.5);
+	
 	// la limite peut être abaissée mais il faut éviter une taille nulle car le mesh deviendra invisible
 	if (size.x < 0.1f)
 		size.x = 0.1f;

@@ -104,9 +104,9 @@ public class xzimgMarkerUnityPluginPlane : MonoBehaviour {
 
 
 	// Size of the video capture (constant)
-    public int CaptureWidth = 1920, CaptureHeight = 1080;
+    public int CaptureWidth = 1280, CaptureHeight = 720;
 	// Size of the image for marker detection
-    public int ProcessingWidth = 1920, ProcessingHeight = 1080;
+    public int ProcessingWidth = 1280, ProcessingHeight = 720;
 	public bool MirrorVideo = false;
 	public float CameraFOVX = 45.0f;
 	
@@ -193,18 +193,16 @@ public class xzimgMarkerUnityPluginPlane : MonoBehaviour {
                 xzimgMarkerInitialize(m_WebcamTexture.requestedWidth, m_WebcamTexture.requestedHeight, ProcessingWidth, ProcessingHeight, Camera.main.fieldOfView * aspect_ratio);
 			
 				// Find the gameobjects for pivot and 3D model
-		        RaquettePivot1 = GameObject.Find("RaquettePivot1");
-		        RaquetteObject1 = GameObject.Find("RaquetteObject1");
+		        RaquettePivot1 = GameObject.Find("PlanePivot");
+		        RaquetteObject1 = GameObject.Find("FormePaddle1");
 
 				// Find the gameobjects for pivot and 3D model
-				RaquettePivot2 = GameObject.Find("RaquettePivot2");
-				RaquetteObject2 = GameObject.Find("RaquetteObject2");
+				RaquettePivot2 = GameObject.Find("PlanePivot");
+				RaquetteObject2 = GameObject.Find("FormePaddle2");
 
 				// Find the gameobjects for pivot and 3D model
 				FieldPivot = GameObject.Find("PlanePivot");
 				FieldObject = GameObject.Find("Forme");
-				
-				GameObject go = new GameObject("MarkerInfo");
 			}
 			
 			// Restore a camera fov that takes the screen width and height into account
@@ -272,16 +270,21 @@ public class xzimgMarkerUnityPluginPlane : MonoBehaviour {
 	                    foreach (Renderer r in renderer) r.enabled = true;
 						
 						Vector3 position = markerInfo.position;
-						Quaternion quat = Quaternion.Euler(markerInfo.euler);
+						Vector3 euler = markerInfo.euler;
+						//euler.x += 90;
+						Quaternion quat = Quaternion.Euler(euler);
 						//If mirror video enabled, invert values
 						if (MirrorVideo) {
 							quat.y = -quat.y;
 							quat.z = -quat.z;
 							position.x = -position.x;
 						}
+
+						Vector3 newposition = new Vector3(RaquetteObject1.transform.localPosition.x, 0, -position.y);
 						//Put the raquette in the right place.
-	                    RaquettePivot1.transform.position = position;
-						RaquettePivot1.transform.rotation = quat;
+						//Debug.Log(newposition);
+	                    RaquetteObject1.transform.localPosition = newposition;
+						//RaquettePivot1.transform.rotation = quat;
 	                }
 
 					if (RaquetteObject2 && markerInfo.markerID == 2388) {
@@ -295,8 +298,9 @@ public class xzimgMarkerUnityPluginPlane : MonoBehaviour {
 							quat.z = -quat.z;
 							position.x = -position.x;
 						}
-						RaquettePivot2.transform.position = position;
-						RaquettePivot2.transform.rotation = quat;
+						Vector3 newposition = new Vector3(RaquetteObject2.transform.localPosition.x, 0, -position.y);
+						RaquetteObject2.transform.localPosition = newposition;
+						//RaquettePivot2.transform.rotation = quat;
 					}
 
 					if (FieldObject && markerInfo.markerID == 1000) {
@@ -304,7 +308,9 @@ public class xzimgMarkerUnityPluginPlane : MonoBehaviour {
 						foreach (Renderer r in renderer) r.enabled = true;
 						
 						Vector3 position = markerInfo.position;
-						Quaternion quat = Quaternion.Euler(markerInfo.euler);
+						Vector3 euler = markerInfo.euler;
+						euler.x += 90;
+						Quaternion quat = Quaternion.Euler(euler);
 						if (MirrorVideo) {
 							quat.y = -quat.y;
 							quat.z = -quat.z;
