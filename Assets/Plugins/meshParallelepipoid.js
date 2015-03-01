@@ -3,9 +3,9 @@
 var Parallelepipoid : GameObject;
 private var newVertices : Vector3[] = new Vector3[8];
 private var newTriangles : int[] = new int[3*12];
-var length : float = 4f;
-var width : float = 1f;
-var height : float = 0.5f;
+var length : float = 16f;
+var width : float = 4f;
+var height : float = 2f;
 var center : boolean = true;
  
 function Start () { 

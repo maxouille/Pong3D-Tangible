@@ -2,7 +2,7 @@
 
 var Plan : GameObject;
 var center : boolean = true;
-var size : Vector2 = new Vector2 (4, 2);
+var size : Vector2 = new Vector2 (16, 8);
 var resolutionX : int = 10;
 var resolutionZ : int = 10;
 private var newVertices : Vector3[] = new Vector3[(resolutionX + 1) * (resolutionZ + 1)];

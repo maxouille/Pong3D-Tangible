@@ -17,10 +17,9 @@ var field : GameObject;
 var ball : GameObject;
 var ballDirX : float = 0.1;
 var ballDirZ : float = 0.1;
-var ballSpeed : float = 0.1;
+var ballSpeed : float = 0.4;
 var goBall : boolean = true;
 
-var D : Vector3;
 var Forme : GameObject;
 
 function Start () {
@@ -30,40 +29,39 @@ function Start () {
 	ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 	ball.transform.parent = Forme.transform;
 	ball.name = "Ball";
-	ball.transform.localScale = new Vector3(0.1,0.1,0.1);
+	ball.transform.localScale = new Vector3(0.4,0.4,0.4);
 	ball.transform.localPosition = Vector3(0, 0, 0);
 	
 	ball.renderer.enabled = false;
 			
-			var t : Transform = Forme.transform;
-			var size : Vector2 = gameObject.Find("Main Camera").GetComponent(meshPlane).size;
- 			
-			fieldWidth = size.x;
-			fieldHeight = size.y;
+	var t : Transform = Forme.transform;
+	var size : Vector2 = gameObject.Find("Main Camera").GetComponent(meshPlane).size;
+ 	
+	fieldWidth = size.x;
+	fieldHeight = size.y;
 
-			//Debug.Log("width : "+fieldWidth+" height : "+fieldHeight);
+	//Debug.Log("width : "+fieldWidth+" height : "+fieldHeight);
 				
 	paddle1 = gameObject.Find("PlanePivot").transform.Find("Forme").transform.Find("FormePaddle1").gameObject;
 	paddle2 = gameObject.Find("PlanePivot").transform.Find("Forme").transform.Find("FormePaddle2").gameObject;
 	
-	paddleHeight = gameObject.Find("Main Camera").GetComponent(meshParallelepipoid).height * paddle1.transform.localScale.y;
+	paddleHeight = gameObject.Find("Main Camera").GetComponent(meshParallelepipoid).length * paddle1.transform.localScale.y;
 	paddleWidth = gameObject.Find("Main Camera").GetComponent(meshParallelepipoid).width * paddle1.transform.localScale.x;
 }
 
 function Update () {
-	/*if (Input.GetKeyDown(KeyCode.Space) == true) {
+	/*if (Input.GetTouch(0) == true) {
 		goBall = true;
-		}*/
+		Debug.Log("touch");
+	}*/
 
 	if (Forme.renderer.isVisible) {
 	 	ball.renderer.enabled = true;
-	 	//if (goBall) {
-	 ballPhysics();
-	 paddlePhysics();
-	// }
-	 }
-	
-	
+		//if (goBall) {
+	 		ballPhysics();
+	 		paddlePhysics();
+	 	//}
+	}
 }
 
 function ballPhysics() {
@@ -118,42 +116,45 @@ function resetBall(loser) {
         ball.transform.localPosition.y = 0;
         ball.transform.localPosition.z = 0;
 
+		var dirX : float = Random.value;
         // if player lost the last point, we send the ball to opponent
         if (loser == 1) {
-                ballDirX = -0.1;
+                ballDirX = -dirX;
         }
         // else if opponent lost, we send ball to player
         else {
-                ballDirX = 0.1;
+                ballDirX = dirX;
         }
 
         // set the ball to move towards the top of the plane
-        ballDirZ = 0.1;
+        ballDirZ = dirX;
 }
 
 function paddlePhysics() {
 
+	var ballDiameter = ball.renderer.bounds.size.x;
+	var rand = Random.value;
 	var ballPosition = ball.transform.localPosition;
 	var paddle1Position = paddle1.transform.localPosition;
 	var paddle2Position = paddle2.transform.localPosition;
 	// if ball is aligned with paddle1 on x plane
 	// remember the position is the CENTER of the object
 	// we only check between the front and the middle of the paddle (one-way collision)
-	if (ballPosition.x <= paddle1Position.x + paddleHeight
-	&& ballPosition.y >= paddle1Position.x) {
+	if (ballPosition.x + ballDiameter  <= paddle1Position.x + paddleWidth
+	&& ballPosition.x + ballDiameter >= paddle1Position.x) {
 		// and if ball is aligned with paddle1 on y plane
-		if (ballPosition.z <= paddle1Position.z + paddleWidth/2
-		&& ballPosition.z >= paddle1Position.z - paddleWidth/2) {
+		if (ballPosition.z <= paddle1Position.z + paddleHeight/2
+		&& ballPosition.z >= paddle1Position.z - paddleHeight/2) {
 			// and if ball is travelling towards player (-ve direction)
 			if (ballDirX < 0) {
 				// stretch the paddle to indicate a hit
 				//raquette1.scale.x *=1.5;
 				// switch direction of ball travel to create bounce
-				ballDirX = -ballDirX;
+				ballDirX = - 2 * ballDirX * rand ;
 				// we impact ball angle when hitting it
 				// this is not realistic physics, just spices up the gameplay
 				// allows you to 'slice' the ball to beat the opponent
-				ballDirZ = -ballDirZ;
+				ballDirZ = - 2 * ballDirZ * rand ;
 			}
 		}
 	}
@@ -161,21 +162,21 @@ function paddlePhysics() {
 	// if ball is aligned with paddle2 on x plane
 	// remember the position is the CENTER of the object
 	// we only check between the front and the middle of the paddle (one-way collision)
-	if (ballPosition.x >= paddle2Position.x - paddleHeight
-	&& ballPosition.x <= paddle2Position.x) {
+	if (ballPosition.x - ballDiameter >= paddle2Position.x - paddleWidth
+	&& ballPosition.x - ballDiameter <= paddle2Position.x) {
 		// and if ball is aligned with paddle2 on y plane
-		if (ballPosition.z <= paddle2Position.z + paddleWidth/2
-		&& ballPosition.z >= paddle2Position.z - paddleWidth/2) {
+		if (ballPosition.z <= paddle2Position.z + paddleHeight/2
+		&& ballPosition.z >= paddle2Position.z - paddleHeight/2) {
 			// and if ball is travelling towards opponent (+ve direction)
 			if (ballDirX > 0) {
 				// stretch the paddle to indicate a hit
 				//raquette2.scale.x *= 1.5;	
 				// switch direction of ball travel to create bounce
-				ballDirX = -ballDirX;
+				ballDirX = - 2 * ballDirX * rand;
 				// we impact ball angle when hitting it
 				// this is not realistic physics, just spices up the gameplay
 				// allows you to 'slice' the ball to beat the opponent
-				ballDirZ = -ballDirZ;
+				ballDirZ = - 2 * ballDirZ * rand;
 			}
 		}
 	}

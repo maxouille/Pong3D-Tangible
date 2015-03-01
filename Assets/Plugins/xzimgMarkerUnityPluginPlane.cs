@@ -309,15 +309,28 @@ public class xzimgMarkerUnityPluginPlane : MonoBehaviour {
 						
 						Vector3 position = markerInfo.position;
 						Vector3 euler = markerInfo.euler;
-						euler.x += 90;
-						Quaternion quat = Quaternion.Euler(euler);
-						if (MirrorVideo) {
+						//euler.x += 90;
+
+						//Vector3 oldRotation = FieldObject.transform.localRotation.eulerAngles;
+
+						//Vector3 newRotation = oldRotation - euler;
+
+						float res1 = euler.x;
+						float res2 = euler.y;
+						float res3 = euler.z;
+
+						Vector3 neweuler = new Vector3(res1+90, res2, res3);
+
+						//Quaternion quat = Quaternion.Euler(neweuler);
+						/*if (MirrorVideo) {
 							quat.y = -quat.y;
 							quat.z = -quat.z;
 							position.x = -position.x;
-						}
-						FieldPivot.transform.position = position;
-						FieldPivot.transform.rotation = quat;
+						}*/
+						FieldObject.transform.localPosition = position;
+						/*FieldObject.transform.localRotation = new Quaternion(0,0,0,0);
+						FieldObject.transform.Rotate(neweuler);*/
+						FieldObject.transform.eulerAngles = neweuler;
 					}
 	            }
 	        }
